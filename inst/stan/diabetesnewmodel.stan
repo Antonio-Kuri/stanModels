@@ -1593,8 +1593,6 @@ generated quantities {
         update[8]=smoker_aux;
       }
       update[19]=mmalb_aux;
-      update[1]+=1;
-      update[7]+=1;
     }
     update[33]=0;
     update[34]=0;
@@ -1602,6 +1600,10 @@ generated quantities {
     update[36]=0;
     update[37]=0;
     update[38]=0;
+  }
+  if (update[32]!=0){
+    update[1]+=1;
+    update[7]+=1;
   }
     }
   if (m==2){

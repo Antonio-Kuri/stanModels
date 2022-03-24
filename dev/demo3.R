@@ -90,5 +90,7 @@ fit <- sampling(m, data=stan_data,
                 algorithm="Fixed_param")
 
 stan_fit <- extract(fit)
+mat_resultados = stan_fit$mat_temp[ , ,c(1:24,28:31)]
+mat_resultados_wr = stan_fit$mat_temp_wr[ , ,c(1:24,28:31)]
 summary(stan_fit$output)
 summary(stan_fit$output_wr)
