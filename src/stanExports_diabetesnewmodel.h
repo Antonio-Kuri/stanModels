@@ -33,7 +33,7 @@ static int current_statement_begin__;
 stan::io::program_reader prog_reader__() {
     stan::io::program_reader reader;
     reader.add_event(0, 0, "start", "model_diabetesnewmodel");
-    reader.add_event(1620, 1618, "end", "model_diabetesnewmodel");
+    reader.add_event(1622, 1620, "end", "model_diabetesnewmodel");
     return reader;
 }
 template <typename T0__, class RNG>
@@ -5834,63 +5834,66 @@ public:
                                             stan::model::cons_list(stan::model::index_uni(19), stan::model::nil_index_list()), 
                                             mmalb_aux, 
                                             "assigning variable update");
-                                current_statement_begin__ = 1596;
-                                stan::model::assign(update, 
-                                            stan::model::cons_list(stan::model::index_uni(1), stan::model::nil_index_list()), 
-                                            (stan::model::rvalue(update, stan::model::cons_list(stan::model::index_uni(1), stan::model::nil_index_list()), "update") + 1), 
-                                            "assigning variable update");
-                                current_statement_begin__ = 1597;
-                                stan::model::assign(update, 
-                                            stan::model::cons_list(stan::model::index_uni(7), stan::model::nil_index_list()), 
-                                            (stan::model::rvalue(update, stan::model::cons_list(stan::model::index_uni(7), stan::model::nil_index_list()), "update") + 1), 
-                                            "assigning variable update");
                                 }
                             }
-                            current_statement_begin__ = 1599;
+                            current_statement_begin__ = 1597;
                             stan::model::assign(update, 
                                         stan::model::cons_list(stan::model::index_uni(33), stan::model::nil_index_list()), 
                                         0, 
                                         "assigning variable update");
-                            current_statement_begin__ = 1600;
+                            current_statement_begin__ = 1598;
                             stan::model::assign(update, 
                                         stan::model::cons_list(stan::model::index_uni(34), stan::model::nil_index_list()), 
                                         0, 
                                         "assigning variable update");
-                            current_statement_begin__ = 1601;
+                            current_statement_begin__ = 1599;
                             stan::model::assign(update, 
                                         stan::model::cons_list(stan::model::index_uni(35), stan::model::nil_index_list()), 
                                         0, 
                                         "assigning variable update");
-                            current_statement_begin__ = 1602;
+                            current_statement_begin__ = 1600;
                             stan::model::assign(update, 
                                         stan::model::cons_list(stan::model::index_uni(36), stan::model::nil_index_list()), 
                                         0, 
                                         "assigning variable update");
-                            current_statement_begin__ = 1603;
+                            current_statement_begin__ = 1601;
                             stan::model::assign(update, 
                                         stan::model::cons_list(stan::model::index_uni(37), stan::model::nil_index_list()), 
                                         0, 
                                         "assigning variable update");
-                            current_statement_begin__ = 1604;
+                            current_statement_begin__ = 1602;
                             stan::model::assign(update, 
                                         stan::model::cons_list(stan::model::index_uni(38), stan::model::nil_index_list()), 
                                         0, 
                                         "assigning variable update");
                         }
+                        current_statement_begin__ = 1604;
+                        if (as_bool(logical_neq(get_base1(update, 32, "update", 1), 0))) {
+                            current_statement_begin__ = 1605;
+                            stan::model::assign(update, 
+                                        stan::model::cons_list(stan::model::index_uni(1), stan::model::nil_index_list()), 
+                                        (stan::model::rvalue(update, stan::model::cons_list(stan::model::index_uni(1), stan::model::nil_index_list()), "update") + 1), 
+                                        "assigning variable update");
+                            current_statement_begin__ = 1606;
+                            stan::model::assign(update, 
+                                        stan::model::cons_list(stan::model::index_uni(7), stan::model::nil_index_list()), 
+                                        (stan::model::rvalue(update, stan::model::cons_list(stan::model::index_uni(7), stan::model::nil_index_list()), "update") + 1), 
+                                        "assigning variable update");
+                        }
                     }
-                    current_statement_begin__ = 1607;
+                    current_statement_begin__ = 1609;
                     if (as_bool(logical_eq(m, 2))) {
-                        current_statement_begin__ = 1608;
+                        current_statement_begin__ = 1610;
                         stan::math::assign(output, update);
-                        current_statement_begin__ = 1609;
+                        current_statement_begin__ = 1611;
                         stan::model::assign(mat_temp, 
                                     stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
                                     update, 
                                     "assigning variable mat_temp");
                     } else if (as_bool(logical_eq(m, 1))) {
-                        current_statement_begin__ = 1612;
+                        current_statement_begin__ = 1614;
                         stan::math::assign(output_wr, update);
-                        current_statement_begin__ = 1613;
+                        current_statement_begin__ = 1615;
                         stan::model::assign(mat_temp_wr, 
                                     stan::model::cons_list(stan::model::index_uni(i), stan::model::nil_index_list()), 
                                     update, 
