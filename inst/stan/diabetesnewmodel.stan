@@ -839,8 +839,8 @@ transformed data {
 }
 
 generated quantities {
-  real mat_temp[time+2,len_his];
-  real mat_temp_wr[time+2,len_his];
+  real mat_temp[time,len_his];
+  real mat_temp_wr[time,len_his];
   int order[complicaciones]={1,2,3,4,5,6,7,8};
   simplex[complicaciones] theta=[0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125]';
   real history[len_his];
@@ -917,7 +917,7 @@ generated quantities {
     mat_temp_wr[1]=update;
   }
 
-  for (i in 1:time+1){
+  for (i in 1:time){
     if (update[32]==0) {
       break; // en algun mumento tengo que cambiar esta condicion
     }
@@ -1627,11 +1627,15 @@ generated quantities {
     }
   if (m==2){
     output = update;
-    mat_temp[i+1]=update;
+    if (i<time){
+      mat_temp[i+1]=update;
+    }
   }
   else if (m==1){
     output_wr = update;
-    mat_temp_wr[i+1]=update;
+    if (i<time){
+      mat_temp_wr[i+1]=update;
+    }
   }
   }
   }
