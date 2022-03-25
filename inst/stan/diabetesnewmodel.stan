@@ -839,8 +839,8 @@ transformed data {
 }
 
 generated quantities {
-  real mat_temp[time+1,len_his];
-  real mat_temp_wr[time+1,len_his];
+  real mat_temp[time+2,len_his];
+  real mat_temp_wr[time+2,len_his];
   int order[complicaciones]={1,2,3,4,5,6,7,8};
   simplex[complicaciones] theta=[0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125]';
   real history[len_his];
@@ -906,7 +906,7 @@ generated quantities {
   history[56]=bmpd;  //duplicates for pre diabetes functions
   history[57]=sbpd;
   history[58]=hdpd;
-  #history[59]=weipd;
+  //history[59]=weipd;
 
   for (m in 1:2){
   update=history;
@@ -917,12 +917,12 @@ generated quantities {
     mat_temp_wr[1]=update;
   }
 
-  for (i in 1:time){
+  for (i in 1:time+1){
     if (update[32]==0) {
       break; // en algun mumento tengo que cambiar esta condicion
     }
     else{
-    if (m==1 && i<3){
+    if (m==1 && i<4 && i>1){
       update = weightRedux_rng(update);
     }
     if (update[52]==0){
