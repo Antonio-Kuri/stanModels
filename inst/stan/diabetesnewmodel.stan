@@ -32,8 +32,18 @@ functions {
     if (age_group_index>7){
       age_group_index=7;
     }
-
     current_height = temp[6];
+    if (temp[52]==0){
+      current_weight=temp[56]*current_height^2;
+    if (temp[3]==0){
+      current_weight=current_weight-normal_rng(female_weightredux[age_group_index],
+      female_weightredux[age_group_index]*0.2);
+    }
+    else {
+      current_weight=current_weight-normal_rng(male_weightredux[age_group_index],
+      male_weightredux[age_group_index]*0.2);
+    }
+    } else {
     if (temp[3]==0){
       current_weight=temp[5]-normal_rng(female_weightredux[age_group_index],
       female_weightredux[age_group_index]*0.2);
@@ -42,7 +52,7 @@ functions {
       current_weight=temp[5]-normal_rng(male_weightredux[age_group_index],
       male_weightredux[age_group_index]*0.2);
     }
-
+    }
     temp[5] =current_weight;
 
     if (temp[52]==1){
