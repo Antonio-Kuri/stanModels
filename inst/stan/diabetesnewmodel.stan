@@ -906,7 +906,7 @@ generated quantities {
   history[56]=bmpd;  //duplicates for pre diabetes functions
   history[57]=sbpd;
   history[58]=hdpd;
-  history[59]=weipd;
+  #history[59]=weipd;
 
   for (m in 1:2){
   update=history;
