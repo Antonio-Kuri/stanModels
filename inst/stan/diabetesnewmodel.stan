@@ -791,6 +791,7 @@ data {
 
 transformed data {
   real bm;
+  real weipd; //weight for non diabetics
   real diab_years;
   real alive;
   real chf_even;
@@ -811,6 +812,7 @@ transformed data {
   amp_even = 0;
   renal_even = 0;
 
+  weipd= bmpd* tall^2;
   bm = weigh/(tall^2);
   diab_years = ag-age_dia;
 
@@ -837,8 +839,8 @@ transformed data {
 }
 
 generated quantities {
-  real mat_temp[time,len_his];
-  real mat_temp_wr[time,len_his];
+  real mat_temp[time+1,len_his];
+  real mat_temp_wr[time+1,len_his];
   int order[complicaciones]={1,2,3,4,5,6,7,8};
   simplex[complicaciones] theta=[0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125]';
   real history[len_his];
@@ -904,9 +906,16 @@ generated quantities {
   history[56]=bmpd;  //duplicates for pre diabetes functions
   history[57]=sbpd;
   history[58]=hdpd;
+  history[59]=weipd;
 
   for (m in 1:2){
   update=history;
+  if (m==2){
+    mat_temp[1]=update;
+  }
+  else if (m==1){
+    mat_temp_wr[1]=update;
+  }
 
   for (i in 1:time){
     if (update[32]==0) {
@@ -1618,11 +1627,11 @@ generated quantities {
     }
   if (m==2){
     output = update;
-    mat_temp[i]=update;
+    mat_temp[i+1]=update;
   }
   else if (m==1){
     output_wr = update;
-    mat_temp_wr[i]=update;
+    mat_temp_wr[i+1]=update;
   }
   }
   }
