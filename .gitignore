@@ -1,2 +1,10 @@
 .Rproj.user
 .Rhistory
+#*.o
+# Stan
+exec/*.rda
+src/*.o
+src/*.h
+src/*.cc
+src/*.cpp
+src/*.hpp

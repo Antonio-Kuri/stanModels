@@ -839,8 +839,8 @@ transformed data {
 }
 
 generated quantities {
-  real mat_temp[time,len_his];
-  real mat_temp_wr[time,len_his];
+  real mat_temp[time + 1,len_his];
+  real mat_temp_wr[time + 1,len_his];
   int order[complicaciones]={1,2,3,4,5,6,7,8};
   simplex[complicaciones] theta=[0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125]';
   real history[len_his];
@@ -922,7 +922,7 @@ generated quantities {
       break; // en algun mumento tengo que cambiar esta condicion
     }
     else{
-    if (m==1 && i<4 && i>1){
+    if (m==1 && i<3){
       update = weightRedux_rng(update);
     }
     if (update[52]==0){
