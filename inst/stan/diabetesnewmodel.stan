@@ -38,8 +38,7 @@ functions {
     if (temp[3]==0){
       current_weight=current_weight-normal_rng(female_weightredux[age_group_index],
       female_weightredux[age_group_index]*0.2);
-    }
-    else {
+    } else {
       current_weight=current_weight-normal_rng(male_weightredux[age_group_index],
       male_weightredux[age_group_index]*0.2);
     }
@@ -47,8 +46,7 @@ functions {
     if (temp[3]==0){
       current_weight=temp[5]-normal_rng(female_weightredux[age_group_index],
       female_weightredux[age_group_index]*0.2);
-    }
-    else {
+    } else {
       current_weight=temp[5]-normal_rng(male_weightredux[age_group_index],
       male_weightredux[age_group_index]*0.2);
     }
@@ -57,8 +55,7 @@ functions {
 
     if (temp[52]==1){
       temp[13]=current_weight/current_height^2;
-    }
-    else if (temp[52]==0){
+    } else if (temp[52]==0){
       temp[56]=current_weight/current_height^2;
     }
 
@@ -149,8 +146,7 @@ functions {
 
     if (temp[3]==0){
       prob=female_death_prob[age_group_index];
-    }
-    else {
+    } else {
       prob=male_death_prob[age_group_index];
     }
 
@@ -818,22 +814,19 @@ transformed data {
 
   if (strok != 0){
     strok_hist = 1;
-  }
-  else {
+  } else {
     strok_hist = 0;
   }
 
   if (mii != 0){
     mii_hist = 1;
-  }
-  else {
+  } else {
     mii_hist = 0;
   }
 
   if (ampu != 0){
     amp_hist = 1;
-  }
-  else {
+  } else {
     amp_hist = 0;
   }
 }
@@ -847,7 +840,7 @@ generated quantities {
   real update[len_his];
   real output[len_his];
   real output_wr[len_his];
-  real primera=0;
+  real primera;
   history[1]=ag;                //current age of subject
   history[2]=age_dia;           //age diagnostic
   history[3]=woma;              //if its a woman 1 for yes
@@ -909,19 +902,18 @@ generated quantities {
   //history[59]=weipd;
 
   for (m in 1:2){
+  primera = 0;
   update=history;
   if (m==2){
     mat_temp[1]=update;
-  }
-  else if (m==1){
+  } else if (m==1){
     mat_temp_wr[1]=update;
   }
 
   for (i in 1:time){
     if (update[32]==0) {
       break; // en algun mumento tengo que cambiar esta condicion
-    }
-    else{
+    } else{
     if (m==1 && i<3){
       update = weightRedux_rng(update);
     }
@@ -955,9 +947,7 @@ generated quantities {
 
       rand2=uniform_rng(0,1);
       update=simDeath_not2d(update,rand2);
-    }
-
-    else {
+    } else {
     for (j in 1:complicaciones){
       int temp;
       int k;
@@ -1067,8 +1057,9 @@ generated quantities {
             rand=uniform_rng(0,1);
             update=simMIm(update,intercept,afro,age_diab,asian,hba1c,hdl,ldl,
             mmalb,pv,sbp,smoker,wb,amp,chf,ihd,stroke,rand);
-          }
-          else {
+
+          } else {
+
             real intercept;
             real age_diab;
             real chf;
