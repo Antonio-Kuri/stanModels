@@ -1627,15 +1627,15 @@ generated quantities {
     }
   if (m==2){
     output = update;
-    if (i<time){
-      mat_temp[i+1]=update;
-    }
+    //if (i<time){
+    mat_temp[i+1]=update;
+    //}
   }
   else if (m==1){
     output_wr = update;
-    if (i<time){
-      mat_temp_wr[i+1]=update;
-    }
+    //if (i<time){
+    mat_temp_wr[i+1]=update;
+    //}
   }
   }
   }

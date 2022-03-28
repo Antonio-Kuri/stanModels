@@ -5919,25 +5919,19 @@ public:
                     if (as_bool(logical_eq(m, 2))) {
                         current_statement_begin__ = 1629;
                         stan::math::assign(output, update);
-                        current_statement_begin__ = 1630;
-                        if (as_bool(logical_lt(i, time))) {
-                            current_statement_begin__ = 1631;
-                            stan::model::assign(mat_temp, 
-                                        stan::model::cons_list(stan::model::index_uni((i + 1)), stan::model::nil_index_list()), 
-                                        update, 
-                                        "assigning variable mat_temp");
-                        }
+                        current_statement_begin__ = 1631;
+                        stan::model::assign(mat_temp, 
+                                    stan::model::cons_list(stan::model::index_uni((i + 1)), stan::model::nil_index_list()), 
+                                    update, 
+                                    "assigning variable mat_temp");
                     } else if (as_bool(logical_eq(m, 1))) {
                         current_statement_begin__ = 1635;
                         stan::math::assign(output_wr, update);
-                        current_statement_begin__ = 1636;
-                        if (as_bool(logical_lt(i, time))) {
-                            current_statement_begin__ = 1637;
-                            stan::model::assign(mat_temp_wr, 
-                                        stan::model::cons_list(stan::model::index_uni((i + 1)), stan::model::nil_index_list()), 
-                                        update, 
-                                        "assigning variable mat_temp_wr");
-                        }
+                        current_statement_begin__ = 1637;
+                        stan::model::assign(mat_temp_wr, 
+                                    stan::model::cons_list(stan::model::index_uni((i + 1)), stan::model::nil_index_list()), 
+                                    update, 
+                                    "assigning variable mat_temp_wr");
                     }
                 }
             }
