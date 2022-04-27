@@ -1,5 +1,186 @@
 functions {
 
+  real ro_rng(real mu, real sigma) {
+    real p = normal_cdf(0, mu, sigma);   // cdf for lb
+    real u = uniform_rng(p, 1);
+    real z = inv_Phi(u);
+    real y = mu + sigma * z;
+    return y;
+  }
+
+  real [] total_cost_hy_rng(real[] update, int blinicy){
+    real temp[size(update)];
+    real ihd_fatal;
+    real ihd_nf;
+    real ihd_state;
+    real mi_fatal;
+    real mi_nf;
+    real mi_state;
+    real chf_fatal;
+    real chf_nf;
+    real chf_state;
+    real str_fatal;
+    real str_nf;
+    real str_state;
+    real amp_fatal;
+    real amp_nf;
+    real amp_state;
+    real ren_fatal;
+    real ren_nf;
+    real ren_state;
+    real bli_nf;
+    real bli_state;
+    real nc_state;
+
+    ihd_fatal = 3955;
+    ihd_nf = 8817;
+    ihd_state = 1710;
+    mi_fatal = 6494;
+    mi_nf = 10630;
+    mi_state = 1682;
+    chf_fatal = 3444;
+    chf_nf = 3444;
+    chf_state = 2244;
+    str_fatal = 4359;
+    str_nf = 6429;
+    str_state = 1737;
+    amp_fatal = 10403;
+    amp_nf = 10403;
+    amp_state = 3166;
+    ren_fatal = 16695;
+    ren_nf = 16695;
+    ren_state = 16695;
+    bli_nf = 2580;
+    bli_state = 967;
+    nc_state = 670;
+
+    temp=update;
+
+    if (temp[32]==1){
+
+      if (temp[26]==1 && temp[35]==1){
+        temp[53]+=ro_rng(mi_nf/2, 0.2*mi_nf/2);
+      } else if (temp[26]==1 && temp[35]==0){
+        temp[53]+=ro_rng(mi_state/2, 0.2*mi_state/2);
+      }
+
+      if (temp[28]==1 && temp[34]==1){
+        temp[53]+=ro_rng(ihd_nf/2, 0.2*ihd_nf/2);
+      } else if (temp[28]==1 && temp[34]==0){
+        temp[53]+=ro_rng(ihd_state/2, 0.2*ihd_state/2);
+      }
+
+      if (temp[29]==1 && temp[33]==1){
+        temp[53]+=ro_rng(chf_nf/2, 0.2*chf_nf/2);
+      } else if (temp[29]==1 && temp[33]==0){
+        temp[53]+=ro_rng(chf_state/2, 0.2*chf_state/2);
+      }
+
+      if (temp[27]==1 && temp[36]==1){
+        temp[53]+=ro_rng(str_nf/2, 0.2*str_nf/2);
+      } else if (temp[27]==1 && temp[36]==0){
+        temp[53]+=ro_rng(str_state/2, 0.2*str_state/2);
+      }
+
+      if (temp[25]==1 && temp[37]==1){
+        temp[53]+=ro_rng(amp_nf/2, 0.2*amp_nf/2);
+      } else if (temp[25]==1 && temp[37]==0){
+        temp[53]+=ro_rng(amp_state/2, 0.2*amp_state/2);
+      }
+
+      if (temp[31]==1 && temp[38]==1){
+        temp[53]+=ro_rng(ren_nf/2, 0.2*ren_nf/2);
+      } else if (temp[31]==1 && temp[38]==0){
+        temp[53]+=ro_rng(ren_state/2, 0.2*ren_state/2);
+      }
+
+      if (temp[30]==1 && blinicy==1){
+        temp[53]+=ro_rng(bli_nf/2, 0.2*bli_nf/2);
+      } else if (temp[30]==1 && blinicy!=1){
+        temp[53]+=ro_rng(bli_state/2, 0.2*bli_state/2);
+      }
+
+      if(sum(temp[23:31])==0){
+        temp[53]+=ro_rng(nc_state/2, 0.2*nc_state/2);
+      }
+
+    } else if(temp[32]==0){
+
+      if(temp[33]==1){
+        temp[53]+=ro_rng(chf_fatal, 0.2*chf_fatal);
+      }
+
+      if(temp[34]==1){
+        temp[53]+=ro_rng(ihd_fatal, 0.2*ihd_fatal);
+      }
+
+      if(temp[35]==1){
+        temp[53]+=ro_rng(mi_fatal, 0.2*mi_fatal);
+      }
+
+      if(temp[36]==1){
+        temp[53]+=ro_rng(str_fatal, 0.2*str_fatal);
+      }
+
+      if(temp[37]==1){
+        temp[53]+=ro_rng(amp_fatal, 0.2*amp_fatal);
+      }
+
+      if(temp[33]==1){
+        temp[53]+=ro_rng(ren_fatal, 0.2*ren_fatal);
+      }
+
+    }
+
+    return temp;
+  }
+
+  real[] sbpRedux_rng(real[] update){ //sbp function, ignore "weight" labels
+    real temp[size(update)];
+    real male_weightredux[7];
+    real female_weightredux[7];
+    real current_weight;
+    real current_height;
+    int age_group_index;
+
+    male_weightredux[1]=4.72;
+    male_weightredux[2]=3.06;
+    male_weightredux[3]=3.32;
+    male_weightredux[4]=2.84;
+    male_weightredux[5]=2.21;
+    male_weightredux[6]=1.28;
+    male_weightredux[7]=1.60;
+
+    female_weightredux[1]=2.81;
+    female_weightredux[2]=2.38;
+    female_weightredux[3]=2.02;
+    female_weightredux[4]=1.41;
+    female_weightredux[5]=1.16;
+    female_weightredux[6]=0.85;
+    female_weightredux[7]=1.02;
+
+    temp=update;
+    age_group_index = 0;
+    while(temp[1]/10>=age_group_index+2){
+      age_group_index+=1;
+    }
+    if (age_group_index>7){
+      age_group_index=7;
+    }
+
+    if (temp[3]==0){
+      current_weight=temp[9]-normal_rng(female_weightredux[age_group_index],
+      female_weightredux[age_group_index]*0.1);
+    } else {
+      current_weight=temp[9]-normal_rng(male_weightredux[age_group_index],
+      male_weightredux[age_group_index]*0.1);
+    }
+
+    temp[9] =current_weight;
+
+    return temp;
+  }
+
   real[] weightRedux_rng(real[] update){
     real temp[size(update)];
     real male_weightredux[7];
@@ -9,7 +190,7 @@ functions {
     int age_group_index;
 
     male_weightredux[1]=2.351;
-    male_weightredux[2]=1.227;
+    male_weightredux[2]=1.527;
     male_weightredux[3]=1.652;
     male_weightredux[4]=1.412;
     male_weightredux[5]=1.102;
@@ -33,60 +214,50 @@ functions {
       age_group_index=7;
     }
     current_height = temp[6];
-    if (temp[52]==0){
-      current_weight=temp[56]*current_height^2;
-    if (temp[3]==0){
-      current_weight=current_weight-normal_rng(female_weightredux[age_group_index],
-      female_weightredux[age_group_index]*0.2);
-    } else {
-      current_weight=current_weight-normal_rng(male_weightredux[age_group_index],
-      male_weightredux[age_group_index]*0.2);
-    }
-    } else {
+
     if (temp[3]==0){
       current_weight=temp[5]-normal_rng(female_weightredux[age_group_index],
-      female_weightredux[age_group_index]*0.2);
+      female_weightredux[age_group_index]*0.1);
     } else {
       current_weight=temp[5]-normal_rng(male_weightredux[age_group_index],
-      male_weightredux[age_group_index]*0.2);
+      male_weightredux[age_group_index]*0.1);
     }
-    }
+
     temp[5] =current_weight;
-
-    if (temp[52]==1){
-      temp[13]=current_weight/current_height^2;
-    } else if (temp[52]==0){
-      temp[56]=current_weight/current_height^2;
-    }
-
+    temp[13]=current_weight/(current_height)^2;
+    // if (temp[52]==1){
+    //   temp[13]=current_weight/current_height^2;
+    // } else if (temp[52 ]==0){
+    //   temp[56]=current_weight/current_height^2;
+    // }
     return temp;
   }
 
-  real[] simDiabetes(real[] update,real intercept, real age, real bmi,
-  real sbp, real dbp, real bgl, real hdl, real trig, real female, real ethni,
-  real rand){
-    real predictor;
-    real H1;
-    real prob;
-    real current_age;
-    real temp[size(update)];
-
-    temp=update;
-    current_age = temp[1];
-
-    predictor=intercept+age*temp[1]+hdl*temp[58]+trig*temp[55]+bgl*temp[54]+
-    bmi*temp[56]+dbp*temp[53]+sbp*temp[57]+female*(1-temp[3])+
-    ethni*(temp[4]==0?1:0);
-
-    H1=1/(1+exp(-predictor));
-    prob=1 - (1 - H1)^(1.0/10);
-    if (prob>rand){
-      temp[52]=1;
-      temp[2]=current_age;
-      temp[7]=1;
-    }
-    return temp;
-  }
+  // real[] simDiabetes(real[] update,real intercept, real age, real bmi,
+  // real sbp, real dbp, real bgl, real hdl, real trig, real female, real ethni,
+  // real rand){
+  //   real predictor;
+  //   real H1;
+  //   real prob;
+  //   real current_age;
+  //   real temp[size(update)];
+  //
+  //   temp=update;
+  //   current_age = temp[1];
+  //
+  //   predictor=intercept+age*temp[1]+hdl*temp[58]+trig*temp[55]+bgl*temp[54]+
+  //   bmi*temp[56]+dbp*temp[53]+sbp*temp[57]+female*(1-temp[3])+
+  //   ethni*(temp[4]==0?1:0);
+  //
+  //   H1=1/(1+exp(-predictor));
+  //   prob=1 - (1 - H1)^(1.0/10);
+  //   if (prob>rand){
+  //     temp[52]=1;
+  //     temp[2]=current_age;
+  //     temp[7]=1;
+  //   }
+  //   return temp;
+  // }
 
   real[] simDeath_not2d(real[] update, real rand){
     real temp[size(update)];
@@ -352,14 +523,6 @@ functions {
     temp[position_rf] = rf_current_year;
 
     return temp;
-  }
-
-  real ro_rng(real mu, real sigma) {
-    real p = normal_cdf(0, mu, sigma);   // cdf for lb
-    real u = uniform_rng(p, 1);
-    real z = inv_Phi(u);
-    real y = mu + sigma * z;
-    return y;
   }
 
   real[] simCHF(real[] update, real intercept, real ro, real age_diab,
@@ -768,26 +931,37 @@ data {
   real egfr;      //egfr
   real micalb;    //albuminuria
   real pvd;       //if peripherial vascular disease
-  real mii;      //mi history
-  real strok;    //stroke history
+  real mii;      //mi amount
+  real strok;    //stroke amount
   real ih;       //ihd history
-  real ch;       //chf history
+  real ch;       //chf amount
   real blin;     //blindness history
   real ampu;     //amount of amputation
   real rena;     //renal failure
   real ulce;     //ulcer hhistory
-  real db;      //diastolic blood preassure
-  real bg;       // blood glucose
-  real tg;       // triglycerides
   real diabetes;// if has diabetes
-  real bmpd;  //duplicates for pre diabetes functions, which we have no way
-  real sbpd;  //of evolving through time
-  real hdpd;
+  // real db;      //diastolic blood preassure
+  // real bg;       // blood glucose
+  // real tg;       // triglycerides
+  // real bmpd;  //duplicates for pre diabetes functions, which we have no way
+  // real sbpd;  //of evolving through time
+  // real hdpd;
+  // real costo_mi1;
+  // //real costo_mi2;
+  // real costo_ihd;
+  // real costo_chf1;
+  // //real costo_chf2;
+  // real costo_stroke1;
+  // //real costo_stroke2;
+  // real costo_renal;
+  // real costo_blind;
+  // real costo_amput;
+  // //real costo_ulcer;
 }
 
 transformed data {
   real bm;
-  real weipd; //weight for non diabetics
+  // real weipd; //weight for non diabetics
   real diab_years;
   real alive;
   real chf_even;
@@ -799,7 +973,9 @@ transformed data {
   real mii_hist;
   real strok_hist;
   real amp_hist;
+  real cost;
 
+  cost = 0;
   alive = 1;
   chf_even = 0;
   ihd_even = 0;
@@ -808,7 +984,7 @@ transformed data {
   amp_even = 0;
   renal_even = 0;
 
-  weipd= bmpd* tall^2;
+  // weipd= bmpd* tall^2;
   bm = weigh/(tall^2);
   diab_years = ag-age_dia;
 
@@ -841,6 +1017,9 @@ generated quantities {
   real output[len_his];
   real output_wr[len_his];
   real primera;
+  // real diedicy;                 // died in current year flag
+  int blinicy;                 // blindness developed in current year
+
   history[1]=ag;                //current age of subject
   history[2]=age_dia;           //age diagnostic
   history[3]=woma;              //if its a woman 1 for yes
@@ -851,8 +1030,8 @@ generated quantities {
   history[8]=smok;               // if smoker 1 for yes
   history[9]=sb;                 // sbp
   history[10]=hba1;               //Hba1C
-  history[11]=ld;                 //LDL
-  history[12]=hd;                 //HDL
+  history[11]=ld/38.67;                 //LDL
+  history[12]=hd/38.67;                 //HDL
   history[13]=bm;               //bmi
   history[14]=wbc;               //white cell
   history[15]=egfr;              //efgr
@@ -879,11 +1058,11 @@ generated quantities {
   history[36]=stro_even;        // stroke event
   history[37]=amp_even;         // amputation even
   history[38]=renal_even;       //renal failure event
-  history[39]=smok;               // if smoker 1 for yes
+  history[39]=smok;               // if smoker 1 for yes initial
   history[40]=sb;                 // sbp initial
   history[41]=hba1;               //Hba1C initial
-  history[42]=ld;                 //LDL initial
-  history[43]=hd;                 //HDL initial
+  history[42]=ld/38.67;                 //LDL initial
+  history[43]=hd/38.67;                 //HDL initial
   history[44]=bm;               //bmi initial
   history[45]=wbc;               //white cell initial
   history[46]=egfr;              //efgr initial
@@ -893,17 +1072,20 @@ generated quantities {
   history[50]=micalb;            //albumia initial
   history[51]=atfib;             //if atrial fibrilation initial
   history[52]=diabetes;
-  history[53]=db;               //diastolic blood preassure
-  history[54]=bg;              // blood glucose
-  history[55]=tg;              // triglycerides
-  history[56]=bmpd;  //duplicates for pre diabetes functions
-  history[57]=sbpd;
-  history[58]=hdpd;
+  history[53]=cost;
+  // history[53]=db;               //diastolic blood preassure
+  // history[54]=bg;              // blood glucose
+  // history[55]=tg;              // triglycerides
+  // history[56]=bmpd;  //duplicates for pre diabetes functions
+  // history[57]=sbpd;
+  // history[58]=hdpd;
   //history[59]=weipd;
 
   for (m in 1:2){
   primera = 0;
+  blinicy = 0;
   update=history;
+
   if (m==2){
     mat_temp[1]=update;
   } else if (m==1){
@@ -914,36 +1096,43 @@ generated quantities {
     if (update[32]==0) {
       break; // en algun mumento tengo que cambiar esta condicion
     } else{
-    if (m==1 && i<3){
-      update = weightRedux_rng(update);
-    }
+
+    update=total_cost_hy_rng(update, blinicy);
+
+    update[33]=0;
+    update[34]=0;
+    update[35]=0;
+    update[36]=0;
+    update[37]=0;
+    update[38]=0;
+
     if (update[52]==0){
-      real intercept;
-      real age;
-      real bmi;
-      real sbp;
-      real dbp;
-      real bgl;
-      real hdl;
-      real trig;
-      real female;
-      real ethni;
-      real rand;
+      // real intercept;
+      // real age;
+      // real bmi;
+      // real sbp;
+      // real dbp;
+      // real bgl;
+      // real hdl;
+      // real trig;
+      // real female;
+      // real ethni;
+      // real rand;
       real rand2;
 
-      intercept=-8.464;
-      age=normal_rng(-0.014,0.004);
-      bmi=normal_rng(0.053,0.005);
-      sbp=normal_rng(0.006,0.002);
-      dbp=normal_rng(0.003,0.004);
-      bgl=normal_rng(0.062,0.002);
-      hdl=normal_rng(-0.018,0.002);
-      trig=normal_rng(0.001,0.00025);
-      female=normal_rng(-0.084,0.066);
-      ethni=normal_rng(-0.466,0.062);
-      rand=uniform_rng(0,1);
-      update=simDiabetes(update,intercept,age,bmi,sbp,dbp,bgl,hdl,trig,female,
-      ethni,rand);
+      // intercept=-8.464;
+      // age=normal_rng(-0.014,0.004);
+      // bmi=normal_rng(0.053,0.005);
+      // sbp=normal_rng(0.006,0.002);
+      // dbp=normal_rng(0.003,0.004);
+      // bgl=normal_rng(0.062,0.002);
+      // hdl=normal_rng(-0.018,0.002);
+      // trig=normal_rng(0.001,0.00025);
+      // female=normal_rng(-0.084,0.066);
+      // ethni=normal_rng(-0.466,0.062);
+      // rand=uniform_rng(0,1);
+      // update=simDiabetes(update,intercept,age,bmi,sbp,dbp,bgl,hdl,trig,female,
+      // ethni,rand);
 
       rand2=uniform_rng(0,1);
       update=simDeath_not2d(update,rand2);
@@ -1181,6 +1370,9 @@ generated quantities {
           rand=uniform_rng(0,1);
           update=simBlind(update,intercept,age_diab,hba1c,heart,sbp,wb,chf,ihd,
           rand);
+          if (update[30]==1){
+            blinicy+=1;
+          }
         }
       }
       else if (order[s]==6){
@@ -1499,16 +1691,6 @@ generated quantities {
       update=continuous_rf(10,update,constant,female,african,asian,
       rf_prev_value,diabet_years,rf_first_value);
 
-      constant=normal_rng(29.007,0.597);
-      female=normal_rng(0.684,0.142);
-      african=0;
-      asian=normal_rng(-1.393,0.224);
-      rf_prev_value=normal_rng(0.669,0.005);
-      diabet_years=normal_rng(0.57,0.064);
-      rf_first_value=normal_rng(0.118,0.005);
-      update=continuous_rf(9,update,constant,female,african,asian,rf_prev_value,
-      diabet_years,rf_first_value);
-
       constant=normal_rng(0.763,0.02);
       female=normal_rng(0.065,0.009);
       african=normal_rng(0.05,0.016);
@@ -1529,15 +1711,32 @@ generated quantities {
       update=cholesterol_rf(11,update,constant,female,african,asian,
       rf_prev_value,diabet_years,rf_first_value);
 
-      constant=normal_rng(0.83,0.039);
-      female=normal_rng(0.045,0.011);
-      african=normal_rng(-0.094,0.016);
-      asian=normal_rng(-0.087,0.014);
-      rf_prev_value=normal_rng(0.952,0.003);
-      diabet_years=normal_rng(-0.165,0.006);
-      rf_first_value=normal_rng(0.034,0.003);
-      update=continuous_rf(13,update,constant,female,african,asian,
-      rf_prev_value,diabet_years,rf_first_value);
+      if (m==1 && i<3){
+        update = weightRedux_rng(update);
+        update = sbpRedux_rng(update);
+
+      } else {
+
+        constant=normal_rng(0.83,0.039);
+        female=normal_rng(0.045,0.011);
+        african=normal_rng(-0.094,0.016);
+        asian=normal_rng(-0.087,0.014);
+        rf_prev_value=normal_rng(0.952,0.003);
+        diabet_years=normal_rng(-0.165,0.006);
+        rf_first_value=normal_rng(0.034,0.003);
+        update=continuous_rf(13,update,constant,female,african,asian,
+        rf_prev_value,diabet_years,rf_first_value);
+
+        constant=normal_rng(29.007,0.597);
+        female=normal_rng(0.684,0.142);
+        african=0;
+        asian=normal_rng(-1.393,0.224);
+        rf_prev_value=normal_rng(0.669,0.005);
+        diabet_years=normal_rng(0.57,0.064);
+        rf_first_value=normal_rng(0.118,0.005);
+        update=continuous_rf(9,update,constant,female,african,asian,
+        rf_prev_value,diabet_years,rf_first_value);
+      }
 
       if(egfr60l_binary==1){
 
@@ -1603,33 +1802,27 @@ generated quantities {
         update[8]=smoker_aux;
       }
       update[19]=mmalb_aux;
+      update[1]+=1;
+      update[7]+=1;
+
     }
-    update[33]=0;
-    update[34]=0;
-    update[35]=0;
-    update[36]=0;
-    update[37]=0;
-    update[38]=0;
   }
-  if (update[32]!=0){
-    update[1]+=1;
-    update[7]+=1;
-  }
+  // if (update[32]!=0){
+  //   update[1]+=1;
+  //   update[7]+=1;
+  // }
     }
+
+  update=total_cost_hy_rng(update, blinicy);
+
   if (m==2){
     output = update;
-    //if (i<time){
     mat_temp[i+1]=update;
-    //}
   }
   else if (m==1){
     output_wr = update;
-    //if (i<time){
     mat_temp_wr[i+1]=update;
-    //}
   }
   }
   }
 }
-
-

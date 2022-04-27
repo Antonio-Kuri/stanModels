@@ -8,3 +8,5 @@ src/*.h
 src/*.cc
 src/*.cpp
 src/*.hpp
+
+*.csv
